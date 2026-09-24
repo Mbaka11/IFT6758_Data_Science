@@ -15,7 +15,7 @@ def calculate_mse(bias, variance, noise_variance):
     """
     # TODO (FR): Implémenter le calcul du MSE
     # TODO (EN): Implement the MSE calculation
-    pass
+    return float(bias**2 + variance + noise_variance)
 
 def relu(x):
     """
@@ -30,7 +30,8 @@ def relu(x):
     """
     # TODO (FR): Implémenter la fonction ReLU
     # TODO (EN): Implement the ReLU function
-    pass
+    result = np.maximum(0, x)
+    return float(result) if np.isscalar(result) else result
 
 def sigmoid(x):
     """
@@ -45,7 +46,8 @@ def sigmoid(x):
     """
     # TODO (FR): Implémenter la fonction Sigmoid
     # TODO (EN): Implement the Sigmoid function
-    pass
+    result = 1 / (1 + np.exp(-x))
+    return float(result) if np.isscalar(result) else result
 
 def logistic_regression_predict(X, w, w0):
     """
@@ -62,7 +64,7 @@ def logistic_regression_predict(X, w, w0):
     """
     # TODO (FR): Implémenter la prédiction de la régression logistique en utilisant votre fonction sigmoid
     # TODO (EN): Implement the logistic regression prediction using your sigmoid function
-    pass
+    return sigmoid(X @ w + w0)
 
 def cross_entropy_loss(y_true, y_pred):
     """
@@ -78,7 +80,10 @@ def cross_entropy_loss(y_true, y_pred):
     """
     # TODO (FR): Implémenter la formule de la perte d'entropie croisée
     # TODO (EN): Implement the cross-entropy loss formula
-    pass
+    epsilon = 1e-15  # To avoid log(0)
+    y_pred = np.clip(y_pred, epsilon, 1 - epsilon)  # Clip
+    loss = -np.sum(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))
+    return float(loss)
 
 def softmax(z):
     """
@@ -93,7 +98,9 @@ def softmax(z):
     """
     # TODO (FR): Implémenter la fonction Softmax
     # TODO (EN): Implement the Softmax function
-    pass
+    shifted_z = z - np.max(z)  # For numerical stability
+    exp_z = np.exp(shifted_z)
+    return exp_z / np.sum(exp_z)
 
 
 def logistic_regression_gradient_step(X, y_true, y_pred, w, w0, eta):
@@ -114,6 +121,9 @@ def logistic_regression_gradient_step(X, y_true, y_pred, w, w0, eta):
     """
     # TODO (FR): Implémenter la mise à jour des poids : w^j = w^j + eta * somme_i (y_i - y_pred_i) * x_i^j
     # TODO (EN): Implement the weight update: w^j = w^j + eta * sum_i (y_i - y_pred_i) * x_i^j
+    error = y_true - y_pred  # Compute the error term
+    w_update = w + eta *  (X.T @ error)  # Update weights
     # TODO (FR): Implémenter la mise à jour du biais : w_0 = w_0 + eta * somme_i (y_i - y_pred_i)
     # TODO (EN): Implement the bias update: w_0 = w_0 + eta * sum_i (y_i - y_pred_i)
-    pass
+    w0_update = float(w0 + eta * np.sum(error))  # Update bias
+    return w_update, w0_update
