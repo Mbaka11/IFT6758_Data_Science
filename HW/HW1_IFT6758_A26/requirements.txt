@@ -1,0 +1,4 @@
+gradescope-utils
+numpy
+scikit-learn
+matplotlib

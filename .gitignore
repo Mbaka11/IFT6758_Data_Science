@@ -1,0 +1,13 @@
+# macOS archive metadata
+.DS_Store
+__MACOSX/
+._*
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
