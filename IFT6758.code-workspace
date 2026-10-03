@@ -1,0 +1,19 @@
+{
+  "folders": [
+    {
+      "name": "Personal course materials",
+      "path": "."
+    },
+    {
+      "name": "Course demos and guidelines",
+      "path": "data_science"
+    },
+    {
+      "name": "Team project",
+      "path": "workspace/project"
+    }
+  ],
+  "settings": {
+    "git.autoRepositoryDetection": true
+  }
+}

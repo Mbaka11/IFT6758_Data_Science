@@ -11,3 +11,7 @@ venv/
 
 # Jupyter
 .ipynb_checkpoints/
+
+# Independent local repositories (not part of this personal repo)
+/data_science/
+/workspace/
