@@ -44,13 +44,21 @@ def parse_xml(path: str) -> pd.DataFrame:
 
     # TODO: 
     # Arbre d'élément XML (utilisez xml.etree.ElementTree)
+    tree = ET.parse(path)
+    root = tree.getroot()
 
     # TODO: itérez sur le root node, pour obtenir les valeurs désirées pour les étiquettes désirées
     # Assurez-vous de chargez toutes les valeurs de TARGET_ATTRIBUTES (utilisez le même nom de colonne dans le dataframe comme nom d'étiquette!). Vous pouvez utilisez la méthode _get_val(person, tag) fournie définie en haut pour obtenir l'étiquette correspondante
-   
-    # TODO: Convertir en dataframe
+    rows = []
+    for person in root:
+        row = {
+            tag: _get_val(person, tag) 
+            for tag in TARGET_ATTRIBUTES
+        }
+        rows.append(row)
 
-    return None
+    # TODO: Convertir en dataframe
+    return pd.DataFrame(rows, columns=TARGET_ATTRIBUTES)
 
 
 # TODO - complétez cette méthode
@@ -66,13 +74,14 @@ def clean_data(df: pd.DataFrame, year_cutoff: int) -> pd.DataFrame:
         pd.DataFrame : Dataframe nettoyé
     """
     # TODO: Enlever données sans information de date de naissance
-
+    df = df.dropna(subset=["birthday"]).copy()
     # TODO: Convertissez les types numériques en entiers
-    
+    df["birthday"] = df["birthday"].astype(int)
+    df["rating"] = df["rating"].astype(int)
     # TODO: Gardez juste les joueurs avec une date de naissance jusqu'à year_cutoff (inclusivement)
+    df = df.loc[df["birthday"] <= year_cutoff].copy()
 
-    return None
-
+    return df
 
 # TODO - complétez cette méthode
 def bin_counts(df: pd.DataFrame, bins: list, bin_centers: list) -> pd.DataFrame:
@@ -105,11 +114,22 @@ def bin_counts(df: pd.DataFrame, bins: list, bin_centers: list) -> pd.DataFrame:
         raise ValueError("Incorrect input format; 'rating' must be a column in the input dataframe")
 
     # TODO: Astuce - utilisez pd.cut, et assurez-vous d'utiliser reset_index() quand utile
-    hist = None
+    grouped = pd.cut(
+        df['rating'],
+        bins=bins,
+        labels=bin_centers,
+        include_lowest=True
+    )
 
     # TODO: Renommer les colonnes, assurez qu'ils ont encore du sens (nous voulons 'rating', 'count')
-
+    hist = (
+        grouped.value_counts()
+        .rename_axis('rating')
+        .reset_index(name='count')
+    )
     # TODO: Ajoutez la colonne 'count_norm'
+    hist["rating"] = hist["rating"].astype(float)
+    hist['count_norm'] = hist['count'] / hist['count'].sum()
 
     return hist
 
@@ -148,9 +168,13 @@ class PermutationTest:
 
         # TODO : échantillonnez deux groupes de taille n_overrep, n_underrep et renvoyez la note maximale pour chacun
         # des groupe dans l'ordre (overrep, underrep)
+        ratings = np.random.permutation(self.df['rating'].to_numpy())
+        
+        over = ratings[:self.n_overrep]
+        under = ratings[self.n_overrep:self.n_overrep + self.n_underrep]
         
         # Astuce : pensez à utiliser np.random.permutation sur un choix approprié de tableau
-        return 
+        return int(over.max()), int(under.max())
 
 
 # TODO - complétez cette méthode
@@ -174,10 +198,14 @@ def sample_two_groups(
     best_under = []
 
     # TODO : exécutez n_iter runs de cette expérience et renvoyez un tableau numpy contenant les valeurs maximales des groupes surreprésentés et sous-représentés respectivement.
-
+    experiment = PermutationTest(df, n_overrep, n_underrep)
     # Astuce : enveloppez votre itérateur avec tqdm pour obtenir une barre de progression, par exemple :
     # >>> for i in tqdm(range(10)):
     # >>>     print(i)
+    for _ in tqdm(range(n_iter)):
+       max_over, max_under = experiment.job()
+       best_over.append(max_over)
+       best_under.append(max_under) 
 
     return np.array(best_over), np.array(best_under)
 
