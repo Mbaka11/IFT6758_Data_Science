@@ -15,3 +15,7 @@ venv/
 # Independent local repositories (not part of this personal repo)
 /data_science/
 /workspace/
+
+# Local study notes and context pointer (not for publication)
+/notes/
+/AGENTS.md

@@ -11,6 +11,10 @@
     {
       "name": "Team project",
       "path": "workspace/project"
+    },
+    {
+      "name": "Team blog",
+      "path": "workspace/blog"
     }
   ],
   "settings": {
