@@ -118,7 +118,7 @@ def bin_counts(df: pd.DataFrame, bins: list, bin_centers: list) -> pd.DataFrame:
         df['rating'],
         bins=bins,
         labels=bin_centers,
-        include_lowest=True
+        right=False
     )
 
     # TODO: Renommer les colonnes, assurez qu'ils ont encore du sens (nous voulons 'rating', 'count')
