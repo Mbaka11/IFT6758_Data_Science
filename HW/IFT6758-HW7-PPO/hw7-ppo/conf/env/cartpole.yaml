@@ -1,0 +1,8 @@
+# @package _global_
+# Small and fast: use it to debug your code (the tests use it too).
+env:
+    env_name: 'CartPole-v1'
+    num_envs: 8
+
+alg:
+    total_timesteps: 100_000

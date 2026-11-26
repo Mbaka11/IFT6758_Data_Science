@@ -1,0 +1,43 @@
+defaults:
+    - _self_
+    - env: halfcheetah   # [halfcheetah, spaceinvaders, cartpole]; select with env=spaceinvaders
+
+env:
+    env_name: 'HalfCheetah-v5'   # set by the env preset in conf/env/
+    exp_name: 'todo'
+    num_envs: 8                  # number of parallel environments used to collect data
+    normalize_reward: True       # scale rewards by a running std of the discounted return
+
+alg:
+    rl_alg: 'ppo'                # ['ppo', 'pg']. pg = one vanilla policy-gradient step per batch
+    total_timesteps: 1_000_000   # total environment steps for training
+    num_steps: 256               # steps per environment per iteration; batch size = num_envs * num_steps
+    gamma: 0.99
+    use_baseline: True           # learn a value function V(s) and use it as the baseline
+    standardize_advantages: True
+    normalize_obs: True          # normalise observations with running mean/std
+    learning_rate: 3e-4          # policy learning rate
+    anneal_lr: True              # linearly decay the learning rates to 0
+    update_epochs: 10            # PPO: passes over the batch per iteration
+    num_minibatches: 32          # PPO: minibatches per epoch
+    clip_coef: 0.2               # PPO clipping epsilon
+    ent_coef: 0.0                # entropy bonus coefficient
+    max_grad_norm: 0.5
+    target_kl: null              # PPO: stop the epoch loop early if approx KL exceeds this
+    init_log_std: 0.0            # initial log std of the Gaussian policy
+    critic_learning_rate: 1e-3   # value function learning rate
+    critic_update_epochs: 10     # passes over the batch for the value function per iteration
+    critic_num_minibatches: 32
+    clip_vloss: False            # use the clipped value loss
+    use_gpu: False
+    network:
+        layer_sizes: [64, 64]
+        activation: 'tanh'       # ['tanh', 'relu', 'leaky_relu', 'elu']
+
+logging:
+    seed: 1
+    eval_freq: 10                # evaluate the deterministic policy every eval_freq iterations
+    eval_episodes: 5
+    eval_deterministic: True     # evaluate with the mean / most likely action instead of sampling
+    video: False                 # save a video of the final policy to <logdir>/videos/
+    logdir: ''                   # do not modify (set at runtime)

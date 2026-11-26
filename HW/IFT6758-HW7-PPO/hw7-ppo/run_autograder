@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Students submit ppo_agent.py and value_critic.py (anywhere in the zip).
+# Remove the reference versions first so a missing file fails instead of using the solution.
+cd /autograder/source
+rm -f ppo/agents/ppo_agent.py ppo/critics/value_critic.py
+
+agent=$(find /autograder/submission -name ppo_agent.py | head -n 1)
+critic=$(find /autograder/submission -name value_critic.py | head -n 1)
+[ -n "$agent" ] && cp "$agent" ppo/agents/ppo_agent.py
+[ -n "$critic" ] && cp "$critic" ppo/critics/value_critic.py
+
+python3 run_tests.py

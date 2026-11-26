@@ -1,0 +1,7 @@
+# @package _global_
+env:
+    env_name: 'HalfCheetah-v5'
+    num_envs: 8
+
+alg:
+    total_timesteps: 1_000_000

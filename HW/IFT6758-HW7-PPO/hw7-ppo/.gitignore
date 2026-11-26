@@ -1,0 +1,12 @@
+data/
+outputs/
+results.json
+autograder.zip
+__pycache__/
+*.mp4
+*.webm
+*.mov
+*.avi
+*.mkv
+videos/
+MUJOCO_LOG.TXT

@@ -1,0 +1,23 @@
+# @package _global_
+# MinAtar Space Invaders: 10x10x6 binary images, 4 discrete actions.
+env:
+    env_name: 'MinAtar/SpaceInvaders-v1'
+    num_envs: 16
+
+alg:
+    total_timesteps: 3_000_000
+    num_steps: 128               # batch = 16 * 128 = 2048
+    normalize_obs: False         # observations are already in {0, 1}
+    learning_rate: 5e-4
+    critic_learning_rate: 5e-4
+    update_epochs: 4
+    num_minibatches: 8
+    critic_update_epochs: 4
+    critic_num_minibatches: 8
+    ent_coef: 0.01
+    network:
+        layer_sizes: [128]       # after the CNN encoder
+        activation: 'relu'
+
+logging:
+    eval_deterministic: False
